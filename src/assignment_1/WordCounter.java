@@ -13,24 +13,38 @@ public class WordCounter{
 	
 	public void parseFile(File file) throws IOException{
 		System.out.println("Starting parsing the file:" + file.getAbsolutePath());
-		
-		if(file.isDirectory()){
-			//parse each file inside the directory
-			File[] content = file.listFiles();
-			for(File current: content){
-				parseFile(current);
-			}
-		}else{
-			Scanner scanner = new Scanner(file);
-			// scanning token by token
-			while (scanner.hasNext()){
-				String  token = scanner.next();
-				if (isValidWord(token)){
-					countWord(token);
+
+		//parse each file inside the directory
+		File[] content = file.listFiles();
+		for(File current: content){
+			Map<String, Integer> temp = new TreeMap<>();
+			parseFile(current, temp);
+
+			Set<String> keys = temp.keySet();
+			Iterator<String> keyIterator = keys.iterator();
+
+			while(keyIterator.hasNext()){
+				String key = keyIterator.next();
+				if(wordCounts.containsKey(key)){
+					int previous = wordCounts.get(key);
+					wordCounts.put(key, previous+1);
 				}
-			}	
-		}		
-		
+				else{
+					wordCounts.put(key, 1);
+				}
+			}
+		}
+	}
+
+	public void parseFile(File file, Map<String, Integer> counts) throws IOException{
+		Scanner scanner = new Scanner(file);
+		// scanning token by token
+		while (scanner.hasNext()){
+			String  token = scanner.next();
+			if (isValidWord(token)){
+				countWord(token, counts);
+			}
+		}
 	}
 	
 	private boolean isValidWord(String word){
@@ -40,11 +54,8 @@ public class WordCounter{
 			
 	}
 	
-	private void countWord(String word){
-		if(wordCounts.containsKey(word)){
-			int previous = wordCounts.get(word);
-			wordCounts.put(word, previous+1);
-		}else{
+	private void countWord(String word, Map<String, Integer> counts){
+		if(!(wordCounts.containsKey(word))){
 			wordCounts.put(word, 1);
 		}
 	}
@@ -80,10 +91,17 @@ public class WordCounter{
 	
 	//main method
 	public static void main(String[] args) {
-		File dataDir = new File("data\\train\\spam");
-		File outFile = new File("out.txt");
-
+		
+		if(args.length < 2){
+			System.err.println("Usage: java WordCounter <inputDir> <outfile>");
+			System.exit(0);
+		}
+		
+		File dataDir = new File(args[0]);
+		File outFile = new File(args[1]);		
+		
 		WordCounter wordCounter = new WordCounter();
+		System.out.println("Hello");
 		try{
 			wordCounter.parseFile(dataDir);
 			wordCounter.outputWordCount(2, outFile);
