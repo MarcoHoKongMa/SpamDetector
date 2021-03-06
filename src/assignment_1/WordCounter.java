@@ -14,15 +14,18 @@ public class WordCounter{
 	public void parseFile(File file) throws IOException{
 		System.out.println("Starting parsing the file:" + file.getAbsolutePath());
 
-		//parse each file inside the directory
+		// >> parse each file one by one inside the directory <<
 		File[] content = file.listFiles();
 		for(File current: content){
 			Map<String, Integer> temp = new TreeMap<>();
+			
+			// >> Parse through a file with a empty treemap <<
 			parseFile(current, temp);
 
 			Set<String> keys = temp.keySet();
 			Iterator<String> keyIterator = keys.iterator();
 
+			// >> Add all the unique words once to the wordCounts treemap <<
 			while(keyIterator.hasNext()){
 				String key = keyIterator.next();
 				if(wordCounts.containsKey(key)){
@@ -36,17 +39,30 @@ public class WordCounter{
 		}
 	}
 
+	/**
+	 * This helper functions keeps track of which unique words appear
+	 * in a specific file.
+	 * @param file the specific file we are parsing.
+	 * @param counts an empty treemap.
+	 * @throws IOException
+	 */
 	public void parseFile(File file, Map<String, Integer> counts) throws IOException{
 		Scanner scanner = new Scanner(file);
 		// scanning token by token
 		while (scanner.hasNext()){
-			String  token = scanner.next();
+			String token = scanner.next();
 			if (isValidWord(token)){
 				countWord(token, counts);
 			}
 		}
+		scanner.close();
 	}
 	
+	/**
+	 * Check to see if a token is a valid word.
+	 * @param word
+	 * @return Boolean.
+	 */
 	private boolean isValidWord(String word){
 		String allLetters = "^[a-zA-Z]+$";
 		// returns true if the word is composed by only letters otherwise returns false;
@@ -54,64 +70,19 @@ public class WordCounter{
 			
 	}
 	
+	/**
+	 * Helper Function counts a word once if it is not in a treemap.
+	 * @param word token being checked.
+	 * @param counts treemap
+	 */
 	private void countWord(String word, Map<String, Integer> counts){
 		if(!(counts.containsKey(word))){
 			counts.put(word, 1);
 		}
 	}
 	
-	public void outputWordCount(int minCount, File output) throws IOException{
-		System.out.println("Saving word counts to file:" + output.getAbsolutePath());
-		System.out.println("Total words:" + wordCounts.keySet().size());
-		
-		if (!output.exists()){
-			output.createNewFile();
-			if (output.canWrite()){
-				PrintWriter fileOutput = new PrintWriter(output);
-				
-				Set<String> keys = wordCounts.keySet();
-				Iterator<String> keyIterator = keys.iterator();
-				
-				while(keyIterator.hasNext()){
-					String key = keyIterator.next();
-					int count = wordCounts.get(key);
-					// testing minimum number of occurances
-					if(count>=minCount){					
-						fileOutput.println(key + ": " + count);
-					}
-				}
-				
-				fileOutput.close();
-			}
-		}else{
-			System.out.println("Error: the output file already exists: " + output.getAbsolutePath());
-		}
-		
-	}
-	
 	//main method
 	public static void main(String[] args) {
-		
-		if(args.length < 2){
-			System.err.println("Usage: java WordCounter <inputDir> <outfile>");
-			System.exit(0);
-		}
-
-		File dataDir = new File(args[0]);
-		File outFile = new File(args[1]);
-		
-		WordCounter wordCounter = new WordCounter();
-		System.out.println("Hello");
-		try{
-			wordCounter.parseFile(dataDir);
-			wordCounter.outputWordCount(2, outFile);
-		}catch(FileNotFoundException e){
-			System.err.println("Invalid input dir: " + dataDir.getAbsolutePath());
-			e.printStackTrace();
-		}catch(IOException e){
-			e.printStackTrace();
-		}
-		
 		
 	}
 	
