@@ -81,6 +81,14 @@ public class WordCounter{
 		}
 	}
 	
+	/**
+	 * Getter function
+	 * @return TreeMap.
+	 */
+	public Map<String, Integer> getTreeMap(){
+		return this.wordCounts;
+	}
+
 	//main method
 	public static void main(String[] args) {
 		
