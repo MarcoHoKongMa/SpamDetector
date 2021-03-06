@@ -55,8 +55,8 @@ public class WordCounter{
 	}
 	
 	private void countWord(String word, Map<String, Integer> counts){
-		if(!(wordCounts.containsKey(word))){
-			wordCounts.put(word, 1);
+		if(!(counts.containsKey(word))){
+			counts.put(word, 1);
 		}
 	}
 	
@@ -96,9 +96,9 @@ public class WordCounter{
 			System.err.println("Usage: java WordCounter <inputDir> <outfile>");
 			System.exit(0);
 		}
-		
+
 		File dataDir = new File(args[0]);
-		File outFile = new File(args[1]);		
+		File outFile = new File(args[1]);
 		
 		WordCounter wordCounter = new WordCounter();
 		System.out.println("Hello");
