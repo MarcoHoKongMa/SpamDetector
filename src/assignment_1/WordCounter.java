@@ -93,5 +93,9 @@ public class WordCounter{
 	public static void main(String[] args) {
 		
 	}
-	
+
+	public double fileCount(File file){
+		String[] content = file.list();
+		return content.length;
+	}
 }
