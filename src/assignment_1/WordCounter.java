@@ -2,100 +2,67 @@ package assignment_1;
 import java.io.*;
 import java.util.*;
 
+/**
+ * This class count the number of words that occur in a single file.
+ */
 
 public class WordCounter{
 	
 	private Map<String, Integer> wordCounts;
 	
+	// >> Constructor <<
 	public WordCounter(){
 		wordCounts = new TreeMap<>();
 	}
 	
-	public void parseFile(File file) throws IOException{
-		System.out.println("Starting parsing the file:" + file.getAbsolutePath());
-
-		// >> parse each file one by one inside the directory <<
-		File[] content = file.listFiles();
-		for(File current: content){
-			Map<String, Integer> temp = new TreeMap<>();
-			
-			// >> Parse through a file with a empty treemap <<
-			parseFile(current, temp);
-
-			Set<String> keys = temp.keySet();
-			Iterator<String> keyIterator = keys.iterator();
-
-			// >> Add all the unique words once to the wordCounts treemap <<
-			while(keyIterator.hasNext()){
-				String key = keyIterator.next();
-				if(wordCounts.containsKey(key)){
-					int previous = wordCounts.get(key);
-					wordCounts.put(key, previous+1);
-				}
-				else{
-					wordCounts.put(key, 1);
-				}
-			}
-		}
-	}
-
 	/**
-	 * This helper functions keeps track of which unique words appear
-	 * in a specific file.
-	 * @param file the specific file we are parsing.
-	 * @param counts an empty treemap.
+	 * ParseFile method takes in a file and processes it file.
+	 * @param file
 	 * @throws IOException
+	 * @return Nothing.
 	 */
-	public void parseFile(File file, Map<String, Integer> counts) throws IOException{
+	public Map<String, Integer> parseFile(File file) throws IOException{
+		System.out.println("Starting parsing the file:" + file.getAbsolutePath());
+		
 		Scanner scanner = new Scanner(file);
-		// scanning token by token
+		// >> Scanning token by token <<
 		while (scanner.hasNext()){
 			String token = scanner.next();
 			if (isValidWord(token)){
-				countWord(token, counts);
+				countWord(token);
 			}
 		}
 		scanner.close();
+		
+		return this.wordCounts;
 	}
 	
 	/**
-	 * Check to see if a token is a valid word.
+	 * Helper Function takes in a token and checks to see if it is a valid string using
+	 * regular expressions.
 	 * @param word
-	 * @return Boolean.
+	 * @return Boolean. True if the string is valid, false otherwise.
 	 */
 	private boolean isValidWord(String word){
 		String allLetters = "^[a-zA-Z]+$";
 		// returns true if the word is composed by only letters otherwise returns false;
 		return word.matches(allLetters);
-			
+	
 	}
 	
 	/**
-	 * Helper Function counts a word once if it is not in a treemap.
-	 * @param word token being checked.
-	 * @param counts treemap
+	 * Helper Function checks to see if the token exists in the Map.
+	 * @param word Token that is a valid string.
+	 * @return Nothing.
 	 */
-	private void countWord(String word, Map<String, Integer> counts){
-		if(!(counts.containsKey(word))){
-			counts.put(word, 1);
+	private void countWord(String word){
+		if(wordCounts.containsKey(word)){
+			// >> If the token exists overwrite the count <<
+			int previous = wordCounts.get(word);
+			wordCounts.put(word, previous+1);
+		}else{
+			// >> If the token doesn't exist put it into the map with count 1<<
+			wordCounts.put(word, 1);
 		}
-	}
-	
-	/**
-	 * Getter function
-	 * @return TreeMap.
-	 */
-	public Map<String, Integer> getTreeMap(){
-		return this.wordCounts;
-	}
-
-	//main method
-	public static void main(String[] args) {
-		
-	}
-
-	public int fileCount(File file){
-		String[] content = file.list();
-		return content.length;
 	}
 }
