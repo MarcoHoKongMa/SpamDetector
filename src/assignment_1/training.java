@@ -30,7 +30,7 @@ public class training {
 
 		while(keyIterator.hasNext()){
 			String key = keyIterator.next();
-			trainHamFreqProbabilities.put(key, trainHamFreq.get(key)/wordCounter.fileCount(dataDir1));
+			trainHamFreqProbabilities.put(key, trainHamFreq.get(key)/(double)wordCounter.fileCount(dataDir1));
 		}
 
 
@@ -55,7 +55,7 @@ public class training {
 
 		while(keyIterator.hasNext()){
 			String key = keyIterator.next();
-			trainSpamFreqProbabilities.put(key, trainSpamFreq.get(key)/wordCounter.fileCount(dataDir2));
+			trainSpamFreqProbabilities.put(key, trainSpamFreq.get(key)/(double)wordCounter.fileCount(dataDir2));
 		}
 
 		// >> Overall Probability TreeMap <<
