@@ -16,12 +16,15 @@ public class training {
 
 		// >> probability that a word is considered spam <<
 		Map<String, Double> probabilityTreeMap = new TreeMap<>();
+		Map<String, Double> probabilityTreeMap1 = new TreeMap<>();
+		Map<String, Double> probabilityTreeMap2 = new TreeMap<>();
 		Map<String, Double> trainSpamFreqProbabilities = trainSpamFrequencyProb();
 		Map<String, Double> trainHamFreqProbabilities = trainHamFrequencyProb();
-		Set<String> keys = trainSpamFreqProbabilities.keySet();
-		Iterator<String> keyIterator = keys.iterator();
 		double spam;
 		double ham;
+
+		Set<String> keys = trainSpamFreqProbabilities.keySet();
+		Iterator<String> keyIterator = keys.iterator();
 
 		while(keyIterator.hasNext()){
 			String key = keyIterator.next();
@@ -31,9 +34,47 @@ public class training {
 			}else{
 				ham = 0.0;
 			}
-			probabilityTreeMap.put(key, spam/(spam+ham));
+			probabilityTreeMap1.put(key, spam/(spam+ham));
+		}
+
+		keys = trainHamFreqProbabilities.keySet();
+		keyIterator = keys.iterator();
+
+		while(keyIterator.hasNext()){
+			String key = keyIterator.next();
+			ham = trainHamFreqProbabilities.get(key);
+
+			if (trainSpamFreqProbabilities.containsKey(key)){
+				spam = trainSpamFreqProbabilities.get(key);
+			}else{
+				spam = 0.0;
+			}
+			probabilityTreeMap2.put(key, spam/(spam+ham));
+		}
+
+		// >> Deep Copy trainSpamFreqProbabilities2 <<
+		keys = probabilityTreeMap1.keySet();
+		keyIterator = keys.iterator();
+		while(keyIterator.hasNext()) {
+			String key = keyIterator.next();
+			probabilityTreeMap.put(key, probabilityTreeMap1.get(key));
+		}
+
+		// >> Merge trainSpamFreqProbabilities1 <<
+		keys = probabilityTreeMap2.keySet();
+		keyIterator = keys.iterator();
+		while(keyIterator.hasNext()) {
+			String key = keyIterator.next();
+			if(probabilityTreeMap.containsKey(key)){
+				double previous = probabilityTreeMap.get(key);
+				probabilityTreeMap.put(key, previous+probabilityTreeMap2.get(key));
+			}
+			else{
+				probabilityTreeMap.put(key, probabilityTreeMap2.get(key));
+			}
 		}
 		this.probTreeMap = probabilityTreeMap;
+		System.out.println(this.probTreeMap.get("ya"));
 	}
 	
 	private Map<String, Double> trainHamFrequencyProb(){
@@ -121,23 +162,6 @@ public class training {
 			trainSpamFreqProbabilities.put(key, (double)trainSpamFreq.get(key)/(double)fileWordCounter.fileCount(this.dataDir2));
 		}
 		return trainSpamFreqProbabilities;
-	}
-
-	private Map<String, Integer> mergeMaps(Map<String, Integer> map1, Map<String, Integer> map2){
-		Set<String> keys = map2.keySet();
-		Iterator<String> keyIterator = keys.iterator();
-
-		while(keyIterator.hasNext()){
-			String key = keyIterator.next();
-			if (map1.containsKey(key)){
-				int previous = map1.get(key);
-				map1.put(key, previous+map2.get(key));
-			}
-			else {
-				map1.put(key, map2.get(key));
-			}
-		}
-		return map1;
 	}
 
 	public Map<String, Double> getProbTreeMap(){
