@@ -31,9 +31,9 @@ public class testing {
     }
 
     private double fileSpamProb(File file){
-        double spamProbability = 0;
-        double n = 0;
-        double prob = 0;
+        double spamProbability = 0.0;
+        double n = 0.0;
+        double prob = 0.0;
         Map<String, Integer> words = new TreeMap<>();
         WordCounter wordCounter = new WordCounter();
         Set<String> keys;
@@ -53,12 +53,12 @@ public class testing {
 
             if (this.object.getProbTreeMap().containsKey(key)){
                 prob = this.object.getProbTreeMap().get(key);
-                n += Math.log(1 - prob) - Math.log(prob);
+                n += (double)(words.get(key)*(Math.log(1.0 - prob) - Math.log(prob)));
             }
         }
 
-        spamProbability = 1 / (1 + Math.exp(n));
-
+        spamProbability = 1.0 / (1.0 + Math.exp(n));
+//        System.out.printf("%.5f\n", spamProbability);
         return spamProbability;
     }
 
