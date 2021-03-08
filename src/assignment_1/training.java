@@ -9,6 +9,7 @@ public class training {
 	private File dataDir3;
 	private Map<String, Double> probTreeMap;
 
+	// >> Constructor <<
 	public training(String directory){
 		this.dataDir1 = new File(directory + "\\train\\ham");
 		this.dataDir2 = new File(directory + "\\train\\spam");
@@ -56,7 +57,13 @@ public class training {
 		return set;
 	}
 
-	
+	/**
+	 * This helper function records the occurrences of every unique word
+	 * within a directory that does not contain spam files and then calculates
+	 * the percentage of files that contain that unique word and returns a Map.
+	 *
+	 * @return trainHamFreqProb.
+	 */
 	private Map<String, Double> trainHamFreqProb(){
 		fileCounter fileWordCounter = new fileCounter();
 		fileCounter fileWordCounter1 = new fileCounter();
@@ -115,6 +122,13 @@ public class training {
 		return trainHamFreqProb;
 	}
 
+	/**
+	 * This helper function records the occurrences of every unique word
+	 * within a directory that contains spam files and then calculates
+	 * the percentage of files that contain that unique word and returns a Map.
+	 *
+	 * @return trainSpamFreqProb.
+	 */
 	private Map<String, Double> trainSpamFreqProb(){
 		fileCounter fileWordCounter = new fileCounter();
 		Map<String, Integer> trainSpamFreq;
