@@ -1,5 +1,8 @@
-package assignment_1;
-import java.io.*;
+package assignment_1_improved;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.*;
 
 public class training {
