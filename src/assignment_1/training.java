@@ -39,9 +39,9 @@ public class training {
 	private Map<String, Double> trainHamFrequencyProb(){
 		fileCounter fileWordCounter = new fileCounter();
 		fileCounter fileWordCounter1 = new fileCounter();
-		Map<String, Integer> trainHamFreq;
-		Map<String, Integer> trainHam1Freq;
-		Map<String, Integer> trainHam2Freq;
+		Map<String, Integer> trainHamFreq = new TreeMap<>();
+		Map<String, Integer> trainHam1Freq = new TreeMap<>();
+		Map<String, Integer> trainHam2Freq = new TreeMap<>();
 		Set<String> keys;
 		Iterator<String> keyIterator;
 
@@ -59,7 +59,28 @@ public class training {
 		// >> Merging two maps <<
         trainHam1Freq = fileWordCounter.getTreeMap();
 		trainHam2Freq = fileWordCounter1.getTreeMap();
-		trainHamFreq = mergeMaps(trainHam1Freq, trainHam2Freq);
+
+		// >> Deep Copy trainHam1Freq <<
+		keys = trainHam1Freq.keySet();
+		keyIterator = keys.iterator();
+		while(keyIterator.hasNext()) {
+			String key = keyIterator.next();
+			trainHamFreq.put(key, trainHam1Freq.get(key));
+		}
+
+		// >> Merge trainHam2Freq <<
+		keys = trainHam2Freq.keySet();
+		keyIterator = keys.iterator();
+		while(keyIterator.hasNext()) {
+			String key = keyIterator.next();
+			if(trainHamFreq.containsKey(key)){
+				int previous = trainHamFreq.get(key);
+				trainHamFreq.put(key, previous+trainHam2Freq.get(key));
+			}
+			else{
+				trainHamFreq.put(key, trainHam2Freq.get(key));
+			}
+		}
 
 		// >> Probabilities that a word appears in a ham file <<
 		Map<String, Double> trainHamFreqProbabilities = new TreeMap<>();
@@ -68,7 +89,7 @@ public class training {
 
 		while(keyIterator.hasNext()){
 			String key = keyIterator.next();
-			trainHamFreqProbabilities.put(key, trainHamFreq.get(key)/(double)fileWordCounter.fileCount(dataDir1)+(double)fileWordCounter.fileCount(dataDir3));
+			trainHamFreqProbabilities.put(key, (double)trainHamFreq.get(key)/((double)fileWordCounter.fileCount(dataDir1)+(double)fileWordCounter.fileCount(dataDir3)));
 		}
 		return trainHamFreqProbabilities;
 	}
@@ -97,7 +118,7 @@ public class training {
 
 		while(keyIterator.hasNext()){
 			String key = keyIterator.next();
-			trainSpamFreqProbabilities.put(key, trainSpamFreq.get(key)/(double)fileWordCounter.fileCount(this.dataDir2));
+			trainSpamFreqProbabilities.put(key, (double)trainSpamFreq.get(key)/(double)fileWordCounter.fileCount(this.dataDir2));
 		}
 		return trainSpamFreqProbabilities;
 	}

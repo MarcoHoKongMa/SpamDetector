@@ -53,12 +53,11 @@ public class testing {
 
             if (this.object.getProbTreeMap().containsKey(key)){
                 prob = this.object.getProbTreeMap().get(key);
-                n += (double)(words.get(key)*(Math.log(1.0 - prob) - Math.log(prob)));
+                n += ((double)words.get(key)*(Math.log(1.0 - prob) - Math.log(prob)));
             }
         }
 
-        spamProbability = 1.0 / (1.0 + Math.exp(n));
-//        System.out.printf("%.5f\n", spamProbability);
+        spamProbability = 1.0 / (1.0 + Math.pow(Math.E, n));
         return spamProbability;
     }
 
