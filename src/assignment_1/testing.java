@@ -1,25 +1,30 @@
 package assignment_1;
+
 import java.io.*;
 import java.util.*;
-
 import java.io.File;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
-public class Testing {
+public class testing {
     private File dataDir1;
     private File dataDir2;
-    private ArrayList<TestFile> testFiles;
-    private Training object = new Training();
+    private ObservableList<TestFile> testFiles = FXCollections.observableArrayList();
+    private training object;
 
-    public Testing(){
-        this.dataDir1 = new File("data\\test\\ham");
-        this.dataDir2 = new File("data\\test\\spam");
+    public testing(String directory){
+        this.dataDir1 = new File(directory + "\\test\\ham");
+        this.dataDir2 = new File(directory + "\\test\\spam");
+        object = new training(directory);
 
         File[] content = dataDir1.listFiles();
+        System.out.println("Starting parsing the file:" + dataDir1.getAbsolutePath());
 		for(File current: content){
             this.testFiles.add(new TestFile(current.getName(), fileSpamProb(current), "Ham"));
         }
 
         content = dataDir2.listFiles();
+        System.out.println("Starting parsing the file:" + dataDir2.getAbsolutePath());
         for(File current: content){
             this.testFiles.add(new TestFile(current.getName(), fileSpamProb(current), "Spam"));
         }
@@ -27,6 +32,8 @@ public class Testing {
 
     private double fileSpamProb(File file){
         double spamProbability = 0;
+        double n = 0;
+        double prob = 0;
         Map<String, Integer> words = new TreeMap<>();
         WordCounter wordCounter = new WordCounter();
         Set<String> keys;
@@ -45,13 +52,17 @@ public class Testing {
             String key = keyIterator.next();
 
             if (this.object.getProbTreeMap().containsKey(key)){
-                spamProbability += words.get(key) * this.object.getProbTreeMap().get(key);
+                prob = this.object.getProbTreeMap().get(key);
+                n += Math.log(1 - prob) - Math.log(prob);
             }
         }
+
+        spamProbability = 1 / (1 + Math.exp(n));
+
         return spamProbability;
     }
 
-    public ArrayList<TestFile> getTestFiles(){
+    public ObservableList<TestFile> getTestFiles(){
         return this.testFiles;
     }
 }

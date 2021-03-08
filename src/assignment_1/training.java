@@ -2,15 +2,15 @@ package assignment_1;
 import java.io.*;
 import java.util.*;
 
-public class Training {
+public class training {
     // >> Class Parameters <<
 	private File dataDir1;
     private File dataDir2;
 	private Map<String, Double> probTreeMap;
 
-	public Training(){
-		this.dataDir1 = new File("data\\train\\ham");
-		this.dataDir2 = new File("data\\train\\spam");
+	public training(String directory){
+		this.dataDir1 = new File(directory + "\\train\\ham");
+		this.dataDir2 = new File(directory + "\\train\\spam");
 
 		// >> probability that a word is considered spam <<
 		Map<String, Double> probabilityTreeMap = new TreeMap<>();

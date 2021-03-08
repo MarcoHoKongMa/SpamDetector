@@ -22,8 +22,6 @@ public class WordCounter{
 	 * @return Nothing.
 	 */
 	public Map<String, Integer> parseFile(File file) throws IOException{
-		System.out.println("Starting parsing the file:" + file.getAbsolutePath());
-		
 		Scanner scanner = new Scanner(file);
 		// >> Scanning token by token <<
 		while (scanner.hasNext()){
