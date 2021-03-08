@@ -26,26 +26,17 @@ public class training {
 		double spam;
 		double ham;
 
-		keys1 = trainSpamFreqProb.keySet();
-		keys2 = trainHamFreqProb.keySet();
-		keys = mergeSet(keys1, keys2);
+		keys = trainSpamFreqProb.keySet();
 		keyIterator = keys.iterator();
 
 		while(keyIterator.hasNext()){
 			key = keyIterator.next();
-
+			spam = trainSpamFreqProb.get(key);
 			if (trainHamFreqProb.containsKey(key)){
 				ham = trainHamFreqProb.get(key);
 			}else{
 				ham = 0.0;
 			}
-
-			if (trainSpamFreqProb.containsKey(key)){
-				spam = trainSpamFreqProb.get(key);
-			}else{
-				spam = 0.0;
-			}
-
 			probabilityTreeMap.put(key, spam/(spam+ham));
 		}
 
