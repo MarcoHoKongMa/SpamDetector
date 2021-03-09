@@ -7,8 +7,11 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
@@ -53,6 +56,7 @@ public class evaluation extends Application{
             // >> Pane for Summanry <<
             GridPane stat = new GridPane();
             stat.setAlignment(Pos.TOP_LEFT);
+            stat.setBackground(new Background(new BackgroundFill(Color.DARKSEAGREEN, null, null)));
             stat.setHgap(10);
             stat.setVgap(10);
             stat.setPadding(new Insets(25, 25, 25, 25));
@@ -85,11 +89,13 @@ public class evaluation extends Application{
             DecimalFormat df = new DecimalFormat("0.00000");
 
             Label showAccuracy = new Label("Accuracy:");
+            showAccuracy.setTextFill(Color.RED);
             TextField calAccuracy = new TextField(df.format(accuracy));
             stat.add(showAccuracy, 0, 0);
             stat.add(calAccuracy, 1, 0);
 
             Label showPrecision = new Label("Precision:");
+            showPrecision.setTextFill(Color.YELLOW);
             TextField calPrecision = new TextField(df.format(precision));
             stat.add(showPrecision, 0, 1);
             stat.add(calPrecision, 1, 1);
