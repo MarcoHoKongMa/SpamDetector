@@ -20,12 +20,20 @@ import java.text.DecimalFormat;
 
 public class evaluation extends Application{
 
+    /**
+     * This start function creates the necessary graphical user interface
+     * for user interaction
+     * @param primaryStage Stage for GUI window
+     * @throws Exception
+     */
     @Override
     public void start(Stage primaryStage) throws Exception {
+        // >> Choose Directory <<
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setInitialDirectory(new File("."));
         File mainDirectory = directoryChooser.showDialog(primaryStage);
 
+        // >> Check for Directory <<
         if(mainDirectory == null){
             Alert alert = new Alert(Alert.AlertType.WARNING, "No directory chosen. Program will be quit now.");
             alert.showAndWait();
@@ -53,7 +61,7 @@ public class evaluation extends Application{
             VBox report = new VBox();
             report.getChildren().addAll(result);
 
-            // >> Pane for Summanry <<
+            // >> Pane for Summary <<
             GridPane stat = new GridPane();
             stat.setAlignment(Pos.TOP_LEFT);
             stat.setBackground(new Background(new BackgroundFill(Color.DARKSEAGREEN, null, null)));
@@ -61,14 +69,14 @@ public class evaluation extends Application{
             stat.setVgap(10);
             stat.setPadding(new Insets(25, 25, 25, 25));
 
-            // >> Accuracy & Precision <<
+            // >> Calculate Accuracy & Precision <<
             System.out.println("Calculating accuracy & precision...");
             double correctGuess = 0;
             double truePositives = 0;
             double falsePositives = 0;
             double numFiles = 0;
 
-            for(TestFile email: evaList.getTestFiles()) {
+            for(TestFile email: evaList.getTestFiles()) {           // >> Count Guesses <<
                 if(email.getActualClass() == "Spam" && email.getSpamProbability() > 0.5) {
                     correctGuess++;
                     truePositives++;
@@ -85,7 +93,7 @@ public class evaluation extends Application{
             double accuracy = correctGuess / numFiles;
             double precision = truePositives / (falsePositives + truePositives);
 
-            // >> Stats Summary <<
+            // >> Display Stats Summary <<
             DecimalFormat df = new DecimalFormat("0.00000");
 
             Label showAccuracy = new Label("Accuracy:");

@@ -7,7 +7,7 @@ import java.util.Scanner;
 import java.util.TreeMap;
 
 /**
- * This class count the number of words that occur in a single file.
+ * This class counts the number of words that occurs in a single file.
  */
 
 public class WordCounter{
@@ -23,7 +23,7 @@ public class WordCounter{
 	 * ParseFile method takes in a file and processes it file.
 	 * @param file
 	 * @throws IOException
-	 * @return Nothing.
+	 * @return wordCounts. A Map.
 	 */
 	public Map<String, Integer> parseFile(File file) throws IOException{
 		Scanner scanner = new Scanner(file);

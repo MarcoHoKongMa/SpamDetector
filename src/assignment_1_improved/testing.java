@@ -11,11 +11,13 @@ import java.util.Set;
 import java.util.TreeMap;
 
 public class testing {
+    // >> Class Parameters <<
     private File dataDir1;
     private File dataDir2;
     private ObservableList<TestFile> testFiles = FXCollections.observableArrayList();
     private training object;
 
+    // >> Constructor <<
     public testing(String directory){
         this.dataDir1 = new File(directory + "\\test\\ham");
         this.dataDir2 = new File(directory + "\\test\\spam");
@@ -34,6 +36,12 @@ public class testing {
         }
     }
 
+    /**
+     * This helper function takes in a file and returns a value between 0.0 to 1.0
+     * representing whether the provided file is a spam file or not.
+     * @param file File that is being evalutated.
+     * @return spamProbability. A double value between 0.0 to 1.0
+     */
     private double fileSpamProb(File file){
         double spamProbability = 0.0;
         double n = 0.0;
@@ -65,6 +73,10 @@ public class testing {
         return spamProbability;
     }
 
+    /**
+     * A getter Method
+     * @return testFiles. A ObservableList<TestFile> variable.
+     */
     public ObservableList<TestFile> getTestFiles(){
         return this.testFiles;
     }
